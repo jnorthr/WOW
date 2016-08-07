@@ -54,7 +54,39 @@ dependencies {
 mainClassName = "org.jnorthr.wow.Chooser"
 webAppDirName = file('war')
 war.duplicatesStrategy = "EXCLUDE"
+task say << {
+	println "$projectDir=["+projectDir+"]"
+}
 
+git {
+    WOW {
+    	url 'https://github.com/jnorthr/WOW.git'
+        directory file("$projectDir")
+        branch 'HEAD'
+        username gitUsername
+        password gitPassword
+
+        options {
+            clone {
+                singleBranch = false
+                cloneSubmodules = true
+                noCheckout = false
+                timeout = 300
+            }
+            pull {
+                rebase = true
+                timeout = 600
+            }
+            push {
+                dryRun = true
+                pushAll = true
+                pushTags = true
+                timeout = 200
+                force = true
+            }
+        }
+    }
+}
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
 }

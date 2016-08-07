@@ -5,6 +5,7 @@ package org.jnorthr.wow;
 // see more examples in above link to include a file filter
 // fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 // fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+// **************************************************************
 
 import java.io.File;
 import java.io.IOException;
