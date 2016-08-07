@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualLightBox>
+    <Gallery version="2.5">
+        <Settings>
+            <AppName>WOW Slider</AppName>
+            <AppUrlS>WOWSlider.com</AppUrlS>
+            <AppVersion>8.7.1</AppVersion>
+            <AutoPlay>true</AutoPlay>
+            <AutoPlayVideo>false</AutoPlayVideo>
+            <Captions>true</Captions>
+            <CaptionsEffect>parallax</CaptionsEffect>
+            <Controls>true</Controls>
+            <FontSize>13</FontSize>
+            <FullScreen>false</FullScreen>
+            <GalleryName>wowtest1</GalleryName>
+            <GallerySuffix>1</GallerySuffix>
+            <HtmlCharset>UTF-8</HtmlCharset>
+            <ImageAspectRatio>true</ImageAspectRatio>
+            <ImageEffect>cube</ImageEffect>
+            <ImageFillColor>#000000</ImageFillColor>
+            <ImageHeight>768</ImageHeight>
+            <ImageQuality>90</ImageQuality>
+            <ImageShrink2>false</ImageShrink2>
+            <ImageStretch>true</ImageStretch>
+            <ImageTemplate>/Volumes/WOWSlider/WOWSlider.app/Contents/Resources/templates/backgnd/convex/</ImageTemplate>
+            <ImageTemplateName>Convex</ImageTemplateName>
+            <ImageWidth>1024</ImageWidth>
+            <Images>true</Images>
+            <JoomlaType>2.5</JoomlaType>
+            <OneLoop>false</OneLoop>
+            <OrderRandom>false</OrderRandom>
+            <PlayPause>true</PlayPause>
+            <Preloader>false</Preloader>
+            <PublishFileName>/Users/jimnorthrop/Dropbox/Projects/Web/wowslider3.html</PublishFileName>
+            <PublishIndex>wowslider3.html</PublishIndex>
+            <PublishPath>/Users/jimnorthrop/Dropbox/Projects/Web</PublishPath>
+            <PublishPreview>true</PublishPreview>
+            <PublishType>file</PublishType>
+            <RelativePath>false</RelativePath>
+            <ShowBullets>1</ShowBullets>
+            <ShowControls>false</ShowControls>
+            <ShowTooltips>1</ShowTooltips>
+            <SizeStyle>2</SizeStyle>
+            <SlideshowDelay>20</SlideshowDelay>
+            <SlideshowDuration>20</SlideshowDuration>
+            <SoundEnable>0</SoundEnable>
+            <SoundFileName></SoundFileName>
+            <StopOnHover>false</StopOnHover>
+            <SwipeSupport>2</SwipeSupport>
+            <TemplateColor>#54ACD2</TemplateColor>
+            <TemplateFont>Gurajada</TemplateFont>
+            <TemplateName>convex</TemplateName>
+            <ThumbAlign>bottom</ThumbAlign>
+            <ThumbFormat>jpg</ThumbFormat>
+            <ThumbHeight>48</ThumbHeight>
+            <ThumbQuality>90</ThumbQuality>
+            <ThumbWidth>0</ThumbWidth>
+            <Thumbnails>false</Thumbnails>
+            <TooltipPos>bottom</TooltipPos>
+            <noFrame>0</noFrame>
+        </Settings>
+        <Images RelativePath="false">
+            <Image>
+                <url>/Users/jimnorthrop/Dropbox/REDUSBKEY/pix/freetext.png</url>
+                <title>freetext</title>
+                <filesize>2346</filesize>
+            </Image>
+            <Image>
+                <url>/Users/jimnorthrop/Dropbox/REDUSBKEY/pix/Screen shot 2013-08-27 at 10.46.15 PM.png</url>
+                <title>Screen shot 2013-08-27 at 10.46.15 PM</title>
+                <filesize>96483</filesize>
+            </Image>
+            <Image>
+                <url>/Users/jimnorthrop/Dropbox/REDUSBKEY/pix/Screen shot 2013-10-03 at 12.32.07 AM.png</url>
+                <title>Screen shot 2013-10-03 at 12.32.07 AM</title>
+                <filesize>62164</filesize>
+            </Image>
+            <Image>
+                <url>/Users/jimnorthrop/Dropbox/REDUSBKEY/pix/Screen shot 2014-02-25 at 8.47.48 AM.png</url>
+                <title>Screen shot 2014-02-25 at 8.47.48 AM</title>
+                <filesize>49969</filesize>
+            </Image>
+        </Images>
+    </Gallery>
+</VisualLightBox>
