@@ -1,0 +1,30 @@
+<configuration debug="true">
+  <!-- Configure so that it outputs to both console, database and log file -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+
+<appender name="data-db" class="ch.qos.logback.classic.db.DBAppender">
+  <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+    <driverClass>oracle.jdbc.OracleDriver</driverClass>
+    <url>jdbc:oracle:thin:@localhost:1521:XE</url>
+    <user>grinder</user>
+    <password>grinder</password>
+  </connectionSource>
+</appender>
+ 
+<logger name="data" additivity="false">
+  <appender-ref ref="data-file" />
+  <appender-ref ref="data-db" />
+</logger>
+
+  <!-- Configure so that it outputs to both console and log file -->
+  <root level="DEBUG">
+    <appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>
+

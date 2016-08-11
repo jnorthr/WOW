@@ -21,6 +21,7 @@ buildscript {
   }
   dependencies {
     classpath "gradle.plugin.de.qaware.seu.as.code:seuac-git-plugin:2.3.0.RC2"
+    classpath "org.slf4j:slf4j-log4j12:1.7.21"
   }
 }
 
@@ -41,14 +42,32 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
+    compile group: 'log4j', name:'log4j', version: '1.2.17'
+	// better put log4j.properties in the src/main/resources folders 
+
     compile "org.codehaus.groovy:groovy-all:2.4.7"
     runtime "org.codehaus.groovy:groovy-all:2.4.7"
+    runtime   "org.slf4j:slf4j-log4j12:1.7.21"
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+    
+    // Spock Framework basic dependencies:
+    testCompile "org.codehaus.groovy:groovy-all:2.4.7"
+    // The version have to be compatible with Groovy:
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+ 
+    // Optional dependencies Spock
+    // To use Hamcrest matchers:
+    testCompile "org.hamcrest:hamcrest-core:1.3"
+ 
+    // To mock classes:
+    testRuntime "cglib:cglib-nodep:3.1"
+    // Use with cglib to mock classes without default constructor:
+    testRuntime "org.objenesis:objenesis:2.1"
 }
 
 mainClassName = "org.jnorthr.wow.Chooser"
@@ -63,8 +82,8 @@ git {
     	url 'https://github.com/jnorthr/WOW.git'
         directory file("$projectDir")
         branch 'HEAD'
-        username gitUsername
-        password gitPassword
+        //username gitUsername
+        //password gitPassword
 
         options {
             clone {
