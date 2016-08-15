@@ -1,3 +1,5 @@
+//@Grab('log4j:log4j:1.2.17')  use this when running outside gradle or groovyConsole
+
 package org.jnorthr.wow;
 // groovy sample to choose one file using java's  JFileChooser
 // would only allow choice of a single directory by setting another JFileChooser feature
@@ -12,11 +14,8 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
-// need these as copied from Dropbox/Projects/LoggingExamples
-import org.slf4j.*
-import groovy.util.logging.Slf4j
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*
+import groovy.util.logging.*  
 
 /**
 * The Chooser program implements a support application that
@@ -31,14 +30,9 @@ import org.slf4j.LoggerFactory;
 * @version 1.0
 * @since   2016-08-01 
 */
-@Slf4j
+@Log4j
 public class Chooser 
 {
-    /**
-     * An Slf4J logger to show log messages.
-     */
-    Logger logger = LoggerFactory.getLogger(Chooser.class);
-
     /**
      * The kind of JFileChooser to show the user.
      */
@@ -61,11 +55,17 @@ public class Chooser
 
     /**
      * A path value to influence the JFileChooser as where to allow the user to initially pick a local file artifact.
-     * Can be over-written by a value chosen in the previous run of this module
+     * Can be over-written by a value chosen in the previous run of this module. See 'rememberpath' below
      */
     def initialPath = System.getProperty("user.dir");
 
+    /**
+     * A path value to influence the JFileChooser as where to allow the user to initially pick a local file artifact.
+     * Can be over-written by a value chosen in the previous run of this module. See 'rememberpath' below
+     */
+	def initialFile = "fileToSave.txt";
 
+	
     /**
      * Parent component of the dialog.
      */
@@ -86,16 +86,24 @@ public class Chooser
 
 
     /**
-     * Temp work area holding a default file path and file name. This name points to a cache where the selection 
-     * from a prior run is stored.  
+     * Temp work area holding a default file path and file name. This name points to a cache where the selected 
+     * path from a prior run is stored.  
      */
-    String rememberpath = System.getProperty("user.home") + File.separator  +".chooser.txt";
+    String rememberpath = System.getProperty("user.home") + File.separator  +".path.txt";
+
+
+    /**
+     * Temp work area holding a default file path and file name. This name points to a cache where the selected 
+     * full filename from a prior run is stored.  
+     */
+    String rememberfile = System.getProperty("user.home") + File.separator  +".file.txt";
 
 
     /**
      * This is the title to appear at the top of user's dialog. It confirms what we expect from the user.  
      */
     String menuTitle = "Make a Selection";
+    
     
     
     // ==============================================
@@ -106,33 +114,48 @@ public class Chooser
      */
     int result = -1;
 
+
     /**
      * Temp work area holding the absolute path to the user's artifact selected with the chooser. 
      * For example: fc.getCurrentDirectory().getAbsolutePath() 
+	 *
+	 * example choosing a file artifact:
+	 * APPROVE path=/Users/jimnorthrop/Dropbox/Projects/Web/config artifact=logback.xml 
+	 * fullname=/Users/jimnorthrop/Dropbox/Projects/Web/config/logback.xml 
+	 * rememberpath=/Users/jimnorthrop/.path.txt 
+	 * isDir=false
      */
     def path = null;
 
 
     /**
      * Temp work area holding only the name of the file the user's artifact selected with the chooser, 
-     * but not it's path. Might not hold a value when Directory_Only choices are in effect.
+     * but not it's path. Holds a value when Directory_Only choice is in effect of lowest level folder name
+     * and parent path is in 'path' variable above.
      */
     def artifact = null;
     
     /**
-     * Temp work area holding the full and complete absolute path and file name of the user's artifact 
+     * Temp work area holding the full and complete absolute path plus file name of the user's artifact 
      * selected with the chooser. 
      */
     def fullname = null;
 
+    /**
+     * Flag set when name of the user's artifact 
+     * selected with the chooser is a folder directory 
+     */
+    boolean isDir = false;
 
+
+   // =========================================================================
    /** 
     * Class constructor.
     * defaults to let user pick either a file or a folder
     */
     public Chooser()
     {
-    	logger.info("this is an .info msg from the Chooser default constructor");
+    	log.info("this is an .info msg from the Chooser default constructor");
         setup();
     } // endof constructor
     
@@ -141,7 +164,7 @@ public class Chooser
     */
     public void setTitle(String newTitle)
     {
-    	logger.info("setTitle(String ${newTitle})");
+    	log.info("setTitle(String ${newTitle})");
         menuTitle = newTitle;
         fc.setDialogTitle(menuTitle);
     } // end of method
@@ -151,7 +174,7 @@ public class Chooser
     */
     public void setOpenOrSave(boolean oos)
     {
-    	logger.info("setOpenOrSave(String ${oos})");
+    	log.info("setOpenOrSave(String ${oos})");
         openOrSave = oos;
     } // end of method
     
@@ -195,6 +218,8 @@ public class Chooser
     {
         boolean present = new File(rememberpath).exists()
         if (present) { initialPath = new File(rememberpath).getText(); }
+        present = new File(rememberfile).exists()
+        if (present) { initialFile = new File(rememberfile).getText(); }
 
         fc = new JFileChooser();
         mode = JFileChooser.DIRECTORIES_ONLY;
@@ -220,8 +245,7 @@ public class Chooser
 
         File workingDirectory = new File(initialPath); 
         fc.setCurrentDirectory(workingDirectory);
-    	logger.info("setup changed fc.setCurrentDirectory to ${initialPath}");
-        
+    	log.info("setup changed fc.setCurrentDirectory to ${initialPath}");
     } // endof setup
 
 
@@ -234,9 +258,10 @@ public class Chooser
         File workingDirectory = new File(initialPath);
         if ( !workingDirectory.exists() ) { throw new RuntimeException("Cannot setPath to non-existence path:"+newPath)} 
         fc.setCurrentDirectory(workingDirectory);
-    } // endof setup
+    } // endof setPath
 
 
+	// =============================================================================
     /**
      * Returns a boolean to indicate what the user did in the JFileChooser dialog. 
      * 
@@ -251,7 +276,7 @@ public class Chooser
      */
     public boolean getChoice()
     {
-        if (!openOrSave) { fc.setSelectedFile(new File("fileToSave.txt")); }
+        if (!openOrSave) { fc.setSelectedFile(new File(initialFile)); }
         result = (!openOrSave) ? fc.showSaveDialog(frame) : fc.showOpenDialog(frame) ;
         chosen = false;
         switch ( result )
@@ -261,9 +286,14 @@ public class Chooser
                   path =  fc.getCurrentDirectory().getAbsolutePath();
                   artifact=file.name;
                   fullname = file.toString();
-                  //println "APPROVE path="+path+" artifact="+artifact+" fullname="+fullname+" rememberpath="+rememberpath
+                  boolean isDir = new File(fullname).isDirectory();
+                  log.info "APPROVE path="+path+" artifact="+artifact+" fullname="+fullname+" rememberpath="+rememberpath+" isDir="+isDir;
+                  
                   def fo = new File(rememberpath)
-                  fo.text = path; 
+                  fo.text = (isDir) ? fullname : path;
+				  fo = new File(rememberfile)
+                  fo.text = (isDir) ? "" : artifact;
+                   
                   chosen = true;
                   break;
 
@@ -275,7 +305,33 @@ public class Chooser
         
         return chosen;
     } // end of pick
-    
+
+
+    /** 
+     * to get user selection of path of a known local folder.
+     */
+    public String getPath()
+    {
+    	return path;
+    } // end of getPath
+
+
+    /** 
+     * To get user selection of file but not path of a known local folder.
+     */
+    public String getFile()
+    {
+    	return artifact;
+    } // end of getFile
+
+    /** 
+     * To get user selection of  full name of a known local folder.
+     */
+    public String getName()
+    {
+    	return fullname;
+    } // end of getName
+
     
     /**
      * The primary method to execute this class. Can be used to test and examine logic and performance issues. 
@@ -287,28 +343,34 @@ public class Chooser
     public static void main(String[] args)
     {
         def ch = new Chooser();
+/*        
+        ch.log.info "trying a SAVE feature"
         ch.setOpenOrSave(false);
         ch.setTitle("Pick a Folder and Filename to save");
         if (ch.getChoice())
         {
-                  println "path="+ch.path+"\nartifact name="+ch.artifact.toString();    
-                  println "the full name of the selected file is "+ch.fullname;    
-        }
-/*        
-        ch = new Chooser(true);
-        if (ch.getChoice())
-        {
-                  println "path="+ch.path+"\nfile name="+ch.artifact.toString();    
-                  println "the full name of the selected file is "+ch.fullname;    
+        	ch.log.info  "path="+ch.path+"\nartifact name="+ch.artifact.toString();    
+            ch.log.info  "the full name of the selected file is "+ch.fullname;    
         }
 
-        ch = new Chooser(false);
+        ch = new Chooser();
+        ch.log.info "trying the default feature"
         if (ch.getChoice())
         {
-                  println "path="+ch.path+"\nfile name="+ch.artifact.toString();    
-                  println "the full name of the selected file is "+ch.fullname;    
+            ch.log.info  "path="+ch.path+"\nfile name="+ch.artifact.toString();    
+        	ch.log.info  "the full name of the selected file is "+ch.fullname;    
         }
 */
+        ch = new Chooser();
+        ch.log.info "trying to pick a folder-only feature"
+        ch.setTitle("Pick input Folder");
+        ch.selectFolderOnly()
+        if (ch.getChoice())
+        {
+            ch.log.info  "path="+ch.path+"\nfile name="+ch.artifact.toString();    
+            ch.log.info  "the full name of the selected file is "+ch.fullname;    
+        }
+        
        System.exit(0);
     } // end of main
 
